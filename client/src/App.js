@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import VotingContract from "./contracts/Voting.json";
 import getWeb3 from "./utils/getWeb3";
 
 import "./App.css";
@@ -17,10 +17,10 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
+      const deployedNetwork = VotingContract.networks[networkId];
       const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
-        deployedNetwork && deployedNetwork.address,
+        VotingContract.abi,
+        deployedNetwork && deployedNetwork.address
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
@@ -29,7 +29,7 @@ class App extends Component {
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
+        `Failed to load web3, accounts, or contract. Check console for details.`
       );
       console.error(error);
     }
@@ -39,13 +39,32 @@ class App extends Component {
     const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
+    console.log({ accounts });
+    const voter = accounts[0];
+    console.log(voter);
+    const gas = 500000;
+    await contract.methods
+      .addBallot("Test ballot", 1, [
+        voter,
+        "0x4e78DA355a9E41b6B06447e4066D731310f94bbA"
+      ])
+      .send({ from: voter, gas });
+    await contract.methods
+      .vote(0, 0)
+      .send({ from: voter, gas });
+    const ballot = await contract.methods.ballots("0").call();
+    const canVote = await contract.methods.canVote("0", voter).call();
+    console.log({ ballot, canVote });
+    const ballotAfter = await contract.methods.ballots("0").call();
+    const proposalVoteCount = await contract.methods.proposalVoteCount("0", "0").call();
+    console.log({ ballotAfter, proposalVoteCount });
+    // console.log({countAfter})
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
+    // const response = await contract.methods.get().call();
 
     // Update state with the result.
-    this.setState({ storageValue: response });
+    // this.setState({ storageValue: response });
   };
 
   render() {
