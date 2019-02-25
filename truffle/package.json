@@ -6,15 +6,20 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ramda": "^0.26.1"
+  },
   "devDependencies": {
+    "@types/ramda": "^0.25.50",
     "bignumber.js": "^8.1.1",
+    "chai": "^4.2.0",
     "truffle-typings": "^1.0.6",
     "ts-node": "^8.0.2",
     "typechain": "^0.3.11",
     "typescript": "^3.3.3333"
   },
   "scripts": {
+    "start": "truffle develop",
     "generate": "truffle compile && typechain --target truffle './build/**/*.json'",
     "test": "truffle test"
   },
