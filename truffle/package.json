@@ -16,7 +16,7 @@
   },
   "scripts": {
     "generate": "truffle compile && typechain --target truffle './build/**/*.json'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "truffle test"
   },
   "keywords": [],
   "author": "",
