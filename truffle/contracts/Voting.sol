@@ -21,6 +21,25 @@ contract Voting {
     event Voted(address voter, uint256 ballotId, uint8 proposalNumber);
     event BallotAdded(uint256 id, string _name);
 
+    //--- Getters
+    function canVote(
+        uint256 ballotId,
+        address voter
+    )
+        public view returns(bool)
+    {
+        return ballots[ballotId].canVote[voter];
+    }
+
+    function proposalVoteCount(
+        uint256 ballotId,
+        uint8 proposalNumber
+    )
+        public view returns(uint256)
+    {
+        return ballots[ballotId].proposalVoteCount[proposalNumber];
+    }
+
     //--- Functions
     function addBallot( string memory name, uint8 proposalCount, address[] memory voters) public {
         require(proposalCount <= MAX_PROPOSAL_COUNT);
