@@ -48,7 +48,7 @@ export interface VotingInstance extends Truffle.ContractInstance {
   ballots(
     arg0: number | BigNumber | string,
     txDetails?: Truffle.TransactionDetails
-  ): Promise<[BigNumber, string, BigNumber]>;
+  ): Promise<[BigNumber, string, BigNumber, boolean]>;
 
   canVote(
     ballotId: number | BigNumber | string,
@@ -66,6 +66,18 @@ export interface VotingInstance extends Truffle.ContractInstance {
     name: string,
     proposalCount: number | BigNumber | string,
     voters: (string | BigNumber)[],
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<Truffle.TransactionResponse>;
+
+  defineBallotProposal(
+    ballotId: number | BigNumber | string,
+    proposalId: number | BigNumber | string,
+    proposalName: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<Truffle.TransactionResponse>;
+
+  begin(
+    ballotId: number | BigNumber | string,
     txDetails?: Truffle.TransactionDetails
   ): Promise<Truffle.TransactionResponse>;
 

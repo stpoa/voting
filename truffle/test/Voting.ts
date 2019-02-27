@@ -1,6 +1,5 @@
 import { assert } from 'chai'
 import { findLast, propEq } from 'ramda'
-import { VotingInstance } from '../types/truffle-contracts'
 
 const VotingContract = artifacts.require('Voting')
 
@@ -66,6 +65,7 @@ contract('Voting', accounts => {
     const voter = VOTERS[0]
 
     await instance.addBallot('Test ballot', 10, VOTERS, { from: voter })
+    await instance.begin(0, { from: voter })
 
     const [, , countBefore] = await instance.ballots(0)
     await instance.vote(0, 0, { from: voter })
@@ -77,6 +77,7 @@ contract('Voting', accounts => {
   it('throws when not voter votes', async () => {
     const instance = await VotingContract.new()
     await instance.addBallot('Test ballot', 10, VOTERS)
+    await instance.begin(0)
 
     await assertPromiseRejected(instance.vote(0, 0, { from: NOT_VOTERS[0] }))
   })
@@ -86,11 +87,12 @@ contract('Voting', accounts => {
 
     const instance = await VotingContract.new()
     const result = await instance.addBallot('Test ballot', 10, VOTERS)
+    await instance.begin(0)
 
     const event = getEventFromLogs(result.logs, 'BallotAdded')
-    const { id } = event.args
+    const { ballotId } = event.args
 
-    assert.equal(id, expectedId)
+    assert.equal(ballotId, expectedId)
   })
 
   it('emits a Voted event', async () => {
@@ -100,6 +102,7 @@ contract('Voting', accounts => {
 
     const instance = await VotingContract.new()
     await instance.addBallot('Test ballot', 10, VOTERS)
+    await instance.begin(0)
     const result = await instance.vote(
       expectedBallotId,
       expectedProposalNumber,
@@ -118,28 +121,25 @@ contract('Voting', accounts => {
     accounts.reduce((prevVoters: string[], account, i) => {
       const voters = [...prevVoters, account]
 
-      let instance: VotingInstance
-      let name: string
-      before(async () => {
-        instance = await VotingContract.new()
-        name = 'Test ballot'
-      })
-
       context(`with ${voters.length} voters`, () => {
         it('adds a ballot', async () => {
+          const name = 'Test ballot'
+          const instance = await VotingContract.new()
           const gas = await (instance.addBallot as any).estimateGas(
             name,
             10,
             voters,
-            { from: CREATOR },
+            { from: VOTERS[0] },
           )
           console.log(`\tGas - addBallot: ${gas}`)
         })
 
         it('votes', async () => {
+          const instance = await VotingContract.new()
           const voter = VOTERS[0]
 
           await instance.addBallot('Test ballot', 10, VOTERS, { from: voter })
+          await instance.begin(0, { from: voter })
 
           const gas = await (instance as any).vote.estimateGas(0, 0, {
             from: voter,

@@ -10,6 +10,7 @@ contract Voting {
         uint8 proposalCount;
         mapping (address => bool) canVote;
         mapping (uint8 => uint256) proposalVoteCount;
+        bool begun;
     }
 
     //--- Variables
@@ -19,7 +20,35 @@ contract Voting {
 
     //--- Events
     event Voted(address voter, uint256 ballotId, uint8 proposalNumber);
-    event BallotAdded(uint256 id, string name);
+    event BallotAdded(uint256 ballotId, string name);
+    event Begun(uint256 ballotId);
+
+    event BallotProposalDefined(
+        uint256 ballotId,
+        uint8 proposalId,
+        string proposalName
+    );
+
+    // Modifiers
+    modifier onlyBegun(uint256 ballotId) {
+        require(ballots[ballotId].begun, "NOT_BEGUN");
+        _;
+    }
+
+    modifier onlyUnbegun(uint256 ballotId) {
+        require(!ballots[ballotId].begun, "BEGUN");
+        _;
+    }
+
+    modifier onlyCanVote(uint256 ballotId) {
+        require(ballots[ballotId].canVote[msg.sender], "CANNOT_VOTE");
+        _;
+    }
+
+    modifier onlyCreator(uint256 ballotId) {
+        require(msg.sender == ballots[ballotId].creator, "NOT_CREATOR");
+        _;
+    }
 
     //--- Getters
     function canVote(
@@ -41,10 +70,20 @@ contract Voting {
     }
 
     //--- Functions
-    function addBallot( string memory name, uint8 proposalCount, address[] memory voters) public {
+    function addBallot(
+        string memory name,
+        uint8 proposalCount,
+        address[] memory voters
+    ) public {
         require(proposalCount <= MAX_PROPOSAL_COUNT);
 
-        ballots[ballotCount] = Ballot(ballotCount, msg.sender, proposalCount);
+        ballots[ballotCount] = Ballot(
+            ballotCount,
+            msg.sender,
+            proposalCount,
+            false
+        );
+
         for (uint i = 0; i < voters.length; ++i) {
             ballots[ballotCount].canVote[voters[i]] = true;
         }
@@ -53,10 +92,24 @@ contract Voting {
         ballotCount++;
     }
 
-    function vote(uint ballotId, uint8 proposalNumber) public {
-        Ballot storage ballot = ballots[ballotId];
+    function defineBallotProposal(
+        uint256 ballotId,
+        uint8 proposalId,
+        string memory proposalName
+    ) public onlyUnbegun(ballotId) {
+        emit BallotProposalDefined(ballotId, proposalId, proposalName);
+    }
 
-        require(ballot.canVote[msg.sender]);
+    function begin(uint256 ballotId) public onlyCreator(ballotId) {
+        ballots[ballotId].begun = true;
+        emit Begun(ballotId);
+    }
+
+    function vote(
+        uint ballotId,
+        uint8 proposalNumber
+    ) public onlyBegun(ballotId) onlyCanVote(ballotId) {
+        Ballot storage ballot = ballots[ballotId];
 
         ballot.canVote[msg.sender] = false;
         ballot.proposalVoteCount[proposalNumber]++;
