@@ -15,6 +15,16 @@ const addBallot = ({ contract, gas, from }) => async ({
     .send({ from, gas })
 }
 
+const defineBallotProposal = ({ contract, gas, from }) => async ({
+  ballotId,
+  proposalId,
+  proposalName,
+}) => {
+  return contract.methods
+    .defineBallotProposal(ballotId + '', proposalId + '', proposalName)
+    .send({ from, gas })
+}
+
 const getContractInstance = async ({ web3, contractDefinition }) => {
   const networkId = await web3.eth.net.getId()
   const deployedNetwork = contractDefinition.networks[networkId]
@@ -32,13 +42,7 @@ const toAddress = num =>
   num
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null }
-  emiters = { ballotAdded: null }
-
-  onBallotAdded = (ballotAddedEvent) => {
-    console.log({ ballotAddedEvent })
-    this.setState({})
-  }
+  state = { web3: null, accounts: null, contract: null }
 
   componentDidMount = async () => {
     const web3 = await getWeb3()
@@ -48,8 +52,8 @@ class App extends Component {
       contractDefinition: VotingContract,
     })
 
-    this.emiters.ballotAdded = contract.events.BallotAdded()
-    this.emiters.ballotAdded.on('data', this.onBallotAdded)
+    // this.emiters.ballotAdded = contract.events.BallotAdded()
+    // this.emiters.ballotAdded.on('data', this.onBallotAdded)
 
     this.setState({ web3, accounts, contract })
   }
@@ -102,15 +106,29 @@ class App extends Component {
     this.setState({ storageValue: 1 })
   }
 
+  defineBallotProposal = async () => {
+    const { accounts, contract } = this.state
+
+    const voter = accounts[0]
+    const gas = 500000
+    const result = await defineBallotProposal({ contract, gas, from: voter })({
+      ballotId: 0 + '',
+      proposalId: 0 + '',
+      proposalName: 'Test proposal 1'
+    })
+    console.log({ result })
+  }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>
     }
     return (
       <div className="App">
-        <Ballot />
+        <Ballot {...this.state } id="0" />
         <button onClick={this.addBallot}>Add ballot</button>
         <button onClick={this.vote}>Vote</button>
+        <button onClick={this.defineBallotProposal}>Define proposal</button>
         <div>The stored value is: {this.state.storageValue}</div>
       </div>
     )
