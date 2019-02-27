@@ -1,92 +1,118 @@
-import React, { Component } from "react";
-import VotingContract from "./contracts/Voting.json";
-import getWeb3 from "./utils/getWeb3";
+import React, { Component } from 'react'
+import VotingContract from './contracts/Voting.json'
+import getWeb3 from './utils/getWeb3'
 
-import "./App.css";
+import './App.css'
+
+const addBallot = ({ contract, gas, from }) => async ({
+  name,
+  proposalCount,
+  voters,
+}) => {
+  return contract.methods
+    .addBallot(name, proposalCount + '', voters)
+    .send({ from, gas })
+}
+
+const getContractInstance = async ({ web3, contractDefinition }) => {
+  const networkId = await web3.eth.net.getId()
+  const deployedNetwork = contractDefinition.networks[networkId]
+  return new web3.eth.Contract(
+    contractDefinition.abi,
+    deployedNetwork && deployedNetwork.address,
+  )
+}
+
+const toAddress = num =>
+  '0x' +
+  Array(40 - (num + '').length)
+    .fill(0)
+    .join('') +
+  num
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = { storageValue: 0, web3: null, accounts: null, contract: null }
+  emiters = { ballotAdded: null }
+
+  onBallotAdded = (ballotAddedEvent) => {
+    console.log({ ballotAddedEvent })
+    this.setState({})
+  }
 
   componentDidMount = async () => {
-    try {
-      // Get network provider and web3 instance.
-      const web3 = await getWeb3();
+    const web3 = await getWeb3()
+    const accounts = await web3.eth.getAccounts()
+    const contract = await getContractInstance({
+      web3,
+      contractDefinition: VotingContract,
+    })
 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
+    this.emiters.ballotAdded = contract.events.BallotAdded()
+    this.emiters.ballotAdded.on('data', this.onBallotAdded)
 
-      // Get the contract instance.
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = VotingContract.networks[networkId];
-      const instance = new web3.eth.Contract(
-        VotingContract.abi,
-        deployedNetwork && deployedNetwork.address
-      );
+    this.setState({ web3, accounts, contract })
+  }
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
-    } catch (error) {
-      // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
-      );
-      console.error(error);
+  componentWillUnmount = async () => {
+    this.emiters.ballotAdded.unsubscribe()
+  }
+
+  addBallot = async () => {
+    const { accounts, contract } = this.state
+
+    const voter = accounts[0]
+    const gas = 500000
+    const addBallotResult = await addBallot({ contract, gas, from: voter })({
+      name: 'Name',
+      proposalCount: 2,
+      voters: [voter, toAddress(1)],
+    })
+    console.log({ addBallotResult })
+
+
+  }
+
+  vote = async () => {
+    const { accounts, contract } = this.state
+    const voter = accounts[0]
+    const gas = 500000
+
+    const canVote = await contract.methods.canVote('0', voter).call()
+    if (canVote) {
+      const ballot = await contract.methods.ballots('0').call()
+      const proposalVoteCount = await contract.methods
+        .proposalVoteCount('0', '0')
+        .call()
+      await contract.methods.vote(0, 0).send({ from: voter, gas })
+      const ballotAfter = await contract.methods.ballots('0').call()
+      const proposalVoteCountAfter = await contract.methods
+        .proposalVoteCount('0', '0')
+        .call()
+      console.log({
+        ballot,
+        ballotAfter,
+        proposalVoteCount,
+        proposalVoteCountAfter,
+      })
+    } else {
+      console.log('Cannot vote')
     }
-  };
 
-  runExample = async () => {
-    const { accounts, contract } = this.state;
-
-    // Stores a given value, 5 by default.
-    console.log({ accounts });
-    const voter = accounts[0];
-    console.log(voter);
-    const gas = 500000;
-    await contract.methods
-      .addBallot("Test ballot", 1, [
-        voter,
-        "0x4e78DA355a9E41b6B06447e4066D731310f94bbA"
-      ])
-      .send({ from: voter, gas });
-    await contract.methods
-      .vote(0, 0)
-      .send({ from: voter, gas });
-    const ballot = await contract.methods.ballots("0").call();
-    const canVote = await contract.methods.canVote("0", voter).call();
-    console.log({ ballot, canVote });
-    const ballotAfter = await contract.methods.ballots("0").call();
-    const proposalVoteCount = await contract.methods.proposalVoteCount("0", "0").call();
-    console.log({ ballotAfter, proposalVoteCount });
-    // console.log({countAfter})
-
-    // Get the value from the contract to prove it worked.
-    // const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    // this.setState({ storageValue: response });
-  };
+    this.setState({ storageValue: 1 })
+  }
 
   render() {
     if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return <div>Loading Web3, accounts, and contract...</div>
     }
     return (
       <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 40</strong> of App.js.
-        </p>
+        <button onClick={this.addBallot}>Add ballot</button>
+        <button onClick={this.vote}>Vote</button>
         <div>The stored value is: {this.state.storageValue}</div>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
