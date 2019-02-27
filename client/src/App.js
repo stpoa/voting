@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import VotingContract from './contracts/Voting.json'
 import getWeb3 from './utils/getWeb3'
+import Ballot from './components/Ballot'
 
 import './App.css'
 
@@ -107,6 +108,7 @@ class App extends Component {
     }
     return (
       <div className="App">
+        <Ballot />
         <button onClick={this.addBallot}>Add ballot</button>
         <button onClick={this.vote}>Vote</button>
         <div>The stored value is: {this.state.storageValue}</div>
