@@ -19,7 +19,7 @@ contract Voting {
 
     //--- Events
     event Voted(address voter, uint256 ballotId, uint8 proposalNumber);
-    event BallotAdded(uint256 id, string _name);
+    event BallotAdded(uint256 id, string name);
 
     //--- Getters
     function canVote(

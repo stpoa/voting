@@ -13,14 +13,18 @@
     "@types/ramda": "^0.25.50",
     "bignumber.js": "^8.1.1",
     "chai": "^4.2.0",
+    "ganache-cli": "^6.3.0",
     "truffle-typings": "^1.0.6",
     "ts-node": "^8.0.2",
     "typechain": "^0.3.11",
     "typescript": "^3.3.3333"
   },
   "scripts": {
-    "start": "truffle develop",
-    "generate": "truffle compile && typechain --target truffle './build/**/*.json'",
+    "start": "npm run testrpc && npm run compile && npm run migrate",
+    "testrpc": "ganache-cli -m 'nuclear february wave industry print security razor hen second detail decline rib' &",
+    "compile": "truffle compile && typechain --target truffle './build/**/*.json' && npm run copy-artifacts",
+    "copy-artifacts": "cp -fr build/contracts/* ../client/src/contracts/",
+    "migrate": "truffle migrate && npm run copy-artifacts",
     "test": "truffle test"
   },
   "keywords": [],

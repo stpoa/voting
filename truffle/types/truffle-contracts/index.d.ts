@@ -50,6 +50,18 @@ export interface VotingInstance extends Truffle.ContractInstance {
     txDetails?: Truffle.TransactionDetails
   ): Promise<[BigNumber, string, BigNumber]>;
 
+  canVote(
+    ballotId: number | BigNumber | string,
+    voter: string | BigNumber,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<boolean>;
+
+  proposalVoteCount(
+    ballotId: number | BigNumber | string,
+    proposalNumber: number | BigNumber | string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<BigNumber>;
+
   addBallot(
     name: string,
     proposalCount: number | BigNumber | string,
