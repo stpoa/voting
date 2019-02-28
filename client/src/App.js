@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import VotingContract from './contracts/Voting.json'
 import getWeb3 from './utils/getWeb3'
 import Ballot from './components/Ballot'
+import BallotList from './components/BallotList'
 
 import './App.css'
 
@@ -125,6 +126,7 @@ class App extends Component {
     }
     return (
       <div className="App">
+        <BallotList {...this.state} />
         <Ballot {...this.state } id="0" />
         <button onClick={this.addBallot}>Add ballot</button>
         <button onClick={this.vote}>Vote</button>

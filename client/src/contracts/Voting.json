@@ -7715,10 +7715,16 @@
       "links": {},
       "address": "0x55a00841e2626685aF72B143D4B857081d018568",
       "transactionHash": "0xf1fd677880decb711534c2119c1e56cd69bcc2be682bdadc2ae154c6126071ed"
+    },
+    "1551370272307": {
+      "events": {},
+      "links": {},
+      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
+      "transactionHash": "0xf1fd677880decb711534c2119c1e56cd69bcc2be682bdadc2ae154c6126071ed"
     }
   },
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-02-27T16:40:22.441Z",
+  "updatedAt": "2019-02-28T16:11:18.347Z",
   "devdoc": {
     "methods": {}
   },
