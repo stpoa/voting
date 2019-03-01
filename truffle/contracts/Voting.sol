@@ -19,15 +19,22 @@ contract Voting {
     uint8 public constant MAX_PROPOSAL_COUNT = 100;
 
     //--- Events
-    event Voted(address voter, uint256 indexed ballotId, uint8 proposalNumber);
-    event BallotAdded(uint256 indexed ballotId, string name);
-    event Begun(uint256 indexed ballotId);
+    event BallotAdded(
+        uint256 indexed id,
+        string creator,
+        uint8 proposalCount,
+        string name
+    );
 
     event BallotProposalDefined(
         uint256 indexed ballotId,
         uint8 indexed proposalId,
         string proposalName
     );
+
+    event Begun(uint256 indexed ballotId);
+
+    event Voted(address voter, uint256 indexed ballotId, uint8 proposalNumber);
 
     // Modifiers
     modifier onlyBegun(uint256 ballotId) {
