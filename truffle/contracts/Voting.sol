@@ -8,6 +8,7 @@ contract Voting {
         uint256 id;
         address creator;
         uint8 proposalCount;
+        mapping (uint8 => bool) proposalDefined;
         mapping (address => bool) canVote;
         mapping (uint8 => uint256) proposalVoteCount;
         bool begun;
@@ -21,7 +22,7 @@ contract Voting {
     //--- Events
     event BallotAdded(
         uint256 indexed id,
-        string creator,
+        address creator,
         uint8 proposalCount,
         string name
     );
@@ -54,6 +55,22 @@ contract Voting {
 
     modifier onlyCreator(uint256 ballotId) {
         require(msg.sender == ballots[ballotId].creator, "NOT_CREATOR");
+        _;
+    }
+
+    modifier onlyUndefinedProposal(uint256 ballotId, uint8 proposalId) {
+        require(
+            !ballots[ballotId].proposalDefined[proposalId],
+            "PROPOSAL_ALREADY_DEFINED"
+        );
+        _;
+    }
+
+    modifier onlyWithinProposalCount(uint256 ballotId, uint8 proposalId) {
+        require(
+            proposalId < ballots[ballotId].proposalCount,
+            "ID_TO_LARGE"
+        );
         _;
     }
 
@@ -95,7 +112,7 @@ contract Voting {
             ballots[ballotCount].canVote[voters[i]] = true;
         }
 
-        emit BallotAdded(ballotCount, name);
+        emit BallotAdded(ballotCount, msg.sender, proposalCount, name);
         ballotCount++;
     }
 
@@ -103,8 +120,13 @@ contract Voting {
         uint256 ballotId,
         uint8 proposalId,
         string memory proposalName
-    ) public onlyUnbegun(ballotId) {
+    ) public
+        onlyUnbegun(ballotId)
+        onlyUndefinedProposal(ballotId, proposalId)
+        onlyWithinProposalCount(ballotId, proposalId)
+    {
         emit BallotProposalDefined(ballotId, proposalId, proposalName);
+        ballots[ballotId].proposalDefined[proposalId] = true;
     }
 
     function begin(uint256 ballotId) public onlyCreator(ballotId) {

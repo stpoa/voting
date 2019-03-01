@@ -84,15 +84,23 @@ contract('Voting', accounts => {
 
   it('emits a BallotAdded event', async () => {
     const expectedId = 0
+    const expectedProposalCount = 10
+    const expectedName = 'Test ballot'
 
     const instance = await VotingContract.new()
-    const result = await instance.addBallot('Test ballot', 10, VOTERS)
+    const result = await instance.addBallot(
+      expectedName,
+      expectedProposalCount,
+      VOTERS,
+    )
     await instance.begin(0)
 
     const event = getEventFromLogs(result.logs, 'BallotAdded')
-    const { ballotId } = event.args
+    const { id, creator, proposalCount, name } = event.args
 
-    assert.equal(ballotId, expectedId)
+    assert.equal(id, expectedId)
+    assert.equal(creator, CREATOR)
+    assert.equal(proposalCount, expectedProposalCount)
   })
 
   it('emits a Voted event', async () => {
