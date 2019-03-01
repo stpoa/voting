@@ -3,8 +3,10 @@ import VotingContract from './contracts/Voting.json'
 import getWeb3 from './utils/getWeb3'
 import Ballot from './components/Ballot'
 import BallotList from './components/BallotList'
+import Identicon from 'identicon.js'
 
 import './App.css'
+import { calculateHash } from './utils/crypto.js'
 
 const addBallot = ({ contract, gas, from }) => async ({
   name,
@@ -53,14 +55,7 @@ class App extends Component {
       contractDefinition: VotingContract,
     })
 
-    // this.emiters.ballotAdded = contract.events.BallotAdded()
-    // this.emiters.ballotAdded.on('data', this.onBallotAdded)
-
     this.setState({ web3, accounts, contract })
-  }
-
-  componentWillUnmount = async () => {
-    this.emiters.ballotAdded.unsubscribe()
   }
 
   addBallot = async () => {
@@ -74,8 +69,6 @@ class App extends Component {
       voters: [voter, toAddress(1)],
     })
     console.log({ addBallotResult })
-
-
   }
 
   vote = async () => {
@@ -115,19 +108,21 @@ class App extends Component {
     const result = await defineBallotProposal({ contract, gas, from: voter })({
       ballotId: 0 + '',
       proposalId: 0 + '',
-      proposalName: 'Test proposal 1'
+      proposalName: 'Test proposal 1',
     })
     console.log({ result })
   }
+
 
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>
     }
+    const data = console.log(data)
     return (
       <div className="App">
         <BallotList {...this.state} />
-        <Ballot {...this.state } id="0" />
+        <Ballot {...this.state} id="0" />
         <button onClick={this.addBallot}>Add ballot</button>
         <button onClick={this.vote}>Vote</button>
         <button onClick={this.defineBallotProposal}>Define proposal</button>
