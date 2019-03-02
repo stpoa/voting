@@ -1,13 +1,13 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import VotingContract from './contracts/Voting.json'
 import getWeb3 from './utils/getWeb3'
 import Ballot from './components/Ballot'
 import BallotList from './components/BallotList'
-import { Typography } from '@material-ui/core'
-
+import { Typography, Divider, withStyles } from '@material-ui/core'
+import BallotCreate from './components/BallotCreate.jsx';
 import './App.css'
 
-const App = () => {
+const App = ({ classes }) => {
   const [web3, setWeb3] = useState(null)
   const [accounts, setAccounts] = useState(null)
   const [contract, setContract] = useState(null)
@@ -34,15 +34,23 @@ const App = () => {
     <div>Loading...</div>
   ) : (
     <div className="App">
-      <Typography variant="h2">Ballot List</Typography>
+      <header className={classes.header}>
+        <Typography variant="h2" color="textSecondary">Voting</Typography>
+      </header>
+      <Divider />
       <BallotList {...{ contract, web3, accounts }} />
 
-      <Typography variant="h2">Ballot</Typography>
       <Ballot {...{ contract, web3, accounts }} id="8" />
 
-      <Typography variant="h2">Ballot Create</Typography>
+      <BallotCreate {...{ contract, web3, accounts }} />
     </div>
   )
 }
 
-export default App
+const styles = {
+  header: {
+    margin: '0.5rem',
+  }
+}
+
+export default withStyles(styles)(App)
