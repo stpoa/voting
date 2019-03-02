@@ -1,135 +1,48 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import VotingContract from './contracts/Voting.json'
 import getWeb3 from './utils/getWeb3'
 import Ballot from './components/Ballot'
 import BallotList from './components/BallotList'
-import Identicon from 'identicon.js'
+import { Typography } from '@material-ui/core'
 
 import './App.css'
-import { calculateHash } from './utils/crypto.js'
 
-const addBallot = ({ contract, gas, from }) => async ({
-  name,
-  proposalCount,
-  voters,
-}) => {
-  return contract.methods
-    .addBallot(name, proposalCount + '', voters)
-    .send({ from, gas })
-}
+const App = () => {
+  const [web3, setWeb3] = useState(null)
+  const [accounts, setAccounts] = useState(null)
+  const [contract, setContract] = useState(null)
 
-const defineBallotProposal = ({ contract, gas, from }) => async ({
-  ballotId,
-  proposalId,
-  proposalName,
-}) => {
-  return contract.methods
-    .defineBallotProposal(ballotId + '', proposalId + '', proposalName)
-    .send({ from, gas })
-}
-
-const getContractInstance = async ({ web3, contractDefinition }) => {
-  const networkId = await web3.eth.net.getId()
-  const deployedNetwork = contractDefinition.networks[networkId]
-  return new web3.eth.Contract(
-    contractDefinition.abi,
-    deployedNetwork && deployedNetwork.address,
-  )
-}
-
-const toAddress = num =>
-  '0x' +
-  Array(40 - (num + '').length)
-    .fill(0)
-    .join('') +
-  num
-
-class App extends Component {
-  state = { web3: null, accounts: null, contract: null }
-
-  componentDidMount = async () => {
-    const web3 = await getWeb3()
-    const accounts = await web3.eth.getAccounts()
-    const contract = await getContractInstance({
-      web3,
-      contractDefinition: VotingContract,
-    })
-
-    this.setState({ web3, accounts, contract })
-  }
-
-  addBallot = async () => {
-    const { accounts, contract } = this.state
-
-    const voter = accounts[0]
-    const gas = 500000
-    const addBallotResult = await addBallot({ contract, gas, from: voter })({
-      name: 'Name',
-      proposalCount: 2,
-      voters: [voter, toAddress(1)],
-    })
-    console.log({ addBallotResult })
-  }
-
-  vote = async () => {
-    const { accounts, contract } = this.state
-    const voter = accounts[0]
-    const gas = 500000
-
-    const canVote = await contract.methods.canVote('0', voter).call()
-    if (canVote) {
-      const ballot = await contract.methods.ballots('0').call()
-      const proposalVoteCount = await contract.methods
-        .proposalVoteCount('0', '0')
-        .call()
-      await contract.methods.vote(0, 0).send({ from: voter, gas })
-      const ballotAfter = await contract.methods.ballots('0').call()
-      const proposalVoteCountAfter = await contract.methods
-        .proposalVoteCount('0', '0')
-        .call()
-      console.log({
-        ballot,
-        ballotAfter,
-        proposalVoteCount,
-        proposalVoteCountAfter,
-      })
-    } else {
-      console.log('Cannot vote')
-    }
-
-    this.setState({ storageValue: 1 })
-  }
-
-  defineBallotProposal = async () => {
-    const { accounts, contract } = this.state
-
-    const voter = accounts[0]
-    const gas = 500000
-    const result = await defineBallotProposal({ contract, gas, from: voter })({
-      ballotId: 0 + '',
-      proposalId: 0 + '',
-      proposalName: 'Test proposal 1',
-    })
-    console.log({ result })
-  }
-
-
-  render() {
-    if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>
-    }
-    const data = console.log(data)
-    return (
-      <div className="App">
-        <BallotList {...this.state} />
-        <Ballot {...this.state} id="0" />
-        <button onClick={this.addBallot}>Add ballot</button>
-        <button onClick={this.vote}>Vote</button>
-        <button onClick={this.defineBallotProposal}>Define proposal</button>
-        <div>The stored value is: {this.state.storageValue}</div>
-      </div>
+  const getContractInstance = async ({ web3, contractDefinition }) => {
+    const networkId = await web3.eth.net.getId()
+    const deployedNetwork = contractDefinition.networks[networkId]
+    return new web3.eth.Contract(
+      contractDefinition.abi,
+      deployedNetwork && deployedNetwork.address,
     )
   }
+
+  useEffect(() => {
+    getWeb3().then(web3 => {
+      setWeb3(web3)
+      web3.eth.getAccounts().then(setAccounts)
+      const contractDefinition = VotingContract
+      getContractInstance({ web3, contractDefinition }).then(setContract)
+    })
+  }, [])
+
+  return !web3 || !contract || !accounts ? (
+    <div>Loading...</div>
+  ) : (
+    <div className="App">
+      <Typography variant="h2">Ballot List</Typography>
+      <BallotList {...{ contract, web3, accounts }} />
+
+      <Typography variant="h2">Ballot</Typography>
+      <Ballot {...{ contract, web3, accounts }} id="8" />
+
+      <Typography variant="h2">Ballot Create</Typography>
+    </div>
+  )
 }
 
 export default App
