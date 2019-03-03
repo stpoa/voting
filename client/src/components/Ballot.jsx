@@ -1,61 +1,121 @@
 import React, { useState, useEffect } from 'react'
+import {
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  withStyles,
+  Button,
+  Dialog,
+  Typography,
+} from '@material-ui/core'
+import { vote } from '../lib/voting'
 
-const Ballot = ({ web3, accounts, contract, id }) => {
-  const [name, setName] = useState('')
+const Ballot = ({
+  accounts,
+  contract,
+  ballot: { name, id: ballotId },
+  ballotOpen,
+  handleBallotClose,
+  classes,
+}) => {
+  const config = { contract, gas: 500000, from: accounts[0] }
+
   const [proposals, setProposals] = useState({})
-  const [selectedProposalIndex, setSelectedProposalIndex] = useState(0)
+  const [proposalNumber, setProposalNumber] = useState(null)
   const [hasBeenVoted, setHasBeenVoted] = useState(false)
-
-
-  // const vote = async () => {
-  //   const voter = accounts[0]
-  //   const gas = 500000
-
-  //   const canVote = await contract.methods.canVote('0', voter).call()
-  //   if (canVote) {
-  //     const ballot = await contract.methods.ballots('0').call()
-  //     const proposalVoteCount = await contract.methods
-  //       .proposalVoteCount('0', '0')
-  //       .call()
-  //     await contract.methods.vote(0, 0).send({ from: voter, gas })
-  //     const ballotAfter = await contract.methods.ballots('0').call()
-  //     const proposalVoteCountAfter = await contract.methods
-  //       .proposalVoteCount('0', '0')
-  //       .call()
-  //     console.log({
-  //       ballot,
-  //       ballotAfter,
-  //       proposalVoteCount,
-  //       proposalVoteCountAfter,
-  //     })
-  //   } else {
-  //     console.log('Cannot vote')
-  //   }
-  // }
-
-  const onBallotAdded = event => setName(event.returnValues.name)
-  const onBallotProposalDefined = event => {
-    const { proposalName, proposalId } = event.returnValues
-    console.log({ proposalId })
-    setProposals((prev) => ({ ...prev, [proposalId]: proposalName }))
+  const resetWholeState = () => {
+    setProposals({})
+    setHasBeenVoted(false)
+    setProposalNumber(null)
   }
 
+  const onBallotProposalDefined = event => {
+    const { proposalName, proposalId } = event.returnValues
+    setProposals(prev => ({ ...prev, [proposalId]: proposalName }))
+  }
+  const onVoted = event => {
+    setHasBeenVoted(true)
+    const num = event.returnValues.proposalNumber
+    setProposalNumber(Number(num))
+  }
   useEffect(() => {
-    const { BallotAdded, BallotProposalDefined } = contract.events
+    resetWholeState()
+
+    const { BallotProposalDefined, Voted } = contract.events
     const idFilter = {
       fromBlock: 0,
       toBlock: 'latest',
-      filter: { ballotId: id },
+      filter: { ballotId },
     }
-
-    const ballotAddedEmiter = BallotAdded(idFilter)
     const ballotProposalDefinedEmiter = BallotProposalDefined(idFilter)
+    const votedEmiter = Voted({ ...idFilter, voter: config.from })
 
-    ballotAddedEmiter.on('data', onBallotAdded)
     ballotProposalDefinedEmiter.on('data', onBallotProposalDefined)
-  }, [])
+    votedEmiter.on('data', onVoted)
 
-  return <div>{name} {Object.values(proposals).join(' ')}</div>
+    return () => {
+      ballotProposalDefinedEmiter.unsubscribe()
+      votedEmiter.unsubscribe()
+    }
+  }, [ballotId])
+
+  const handleVoteSelect = e => {
+    const { value } = e.target
+    setProposalNumber(value)
+  }
+  const handleVoteSubmit = e => {
+    e.preventDefault()
+
+    vote(config)({ ballotId, proposalNumber })
+    setHasBeenVoted(true)
+  }
+
+  return (
+    <Dialog
+      open={ballotOpen}
+      onClose={handleBallotClose}
+      aria-labelledby="form-dialog-title"
+    >
+      <Typography variant="h4">{name}</Typography>
+
+      <FormControl
+        onSubmit={handleVoteSubmit}
+        component="form"
+        className={classes.formControl}
+      >
+        <FormLabel component="legend">Gender</FormLabel>
+        <RadioGroup
+          aria-label="Gender"
+          name="gender1"
+          className={classes.group}
+          value={proposalNumber + ''}
+          onChange={handleVoteSelect}
+        >
+          {Object.entries(proposals).map(([proposalId, proposalName]) => (
+            <FormControlLabel
+              disabled={hasBeenVoted}
+              key={proposalId}
+              value={proposalId}
+              control={<Radio />}
+              label={proposalName}
+            />
+          ))}
+        </RadioGroup>
+        <Button
+          disabled={proposalNumber === null || hasBeenVoted}
+          variant="outlined"
+          color="primary"
+          type="submit"
+        >
+          Vote
+        </Button>
+      </FormControl>
+    </Dialog>
+  )
 }
 
-export default Ballot
+const styles = {}
+
+export default withStyles(styles)(Ballot)

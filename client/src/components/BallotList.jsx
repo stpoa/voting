@@ -7,7 +7,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Identicon from 'identicon.js'
 import { format } from 'date-fns'
 
-const BallotList = ({ classes, web3, accounts, contract }) => {
+const BallotList = ({ classes, web3, contract, handleBallotClick }) => {
   const [ballots, setBallots] = useState({})
 
   const onBallotAdded = event => {
@@ -37,7 +37,11 @@ const BallotList = ({ classes, web3, accounts, contract }) => {
   return (
     <List className={classes.root}>
       {Object.entries(ballots).map(([key, { hash, name, timestamp }]) => (
-        <ListItem {...{ key }}>
+        <ListItem
+          button
+          onClick={handleBallotClick({ id: key, hash, name, timestamp })}
+          {...{ key }}
+        >
           <Avatar style={{ borderRadius: 0 }}>
             <img src={'data:image/png;base64,' + new Identicon(hash)} />
           </Avatar>

@@ -8,7 +8,7 @@ import {
   TextField,
   withStyles,
 } from '@material-ui/core'
-import { defineBallotProposal, addBallot } from '../lib/voting';
+import { defineBallotProposal, addBallot, begin } from '../lib/voting';
 
 const BallotCreate = ({ classes, web3, accounts, contract }) => {
   const [addBallotDialogOpen, setAddBallotDialogOpen] = useState(false)
@@ -35,6 +35,7 @@ const BallotCreate = ({ classes, web3, accounts, contract }) => {
         defineBallotProposal(config)({ ballotId, proposalId: i, proposalName }),
       ),
     )
+    await begin(config)({ ballotId })
   }
 
   const handleAddBallotCancel = () => {
