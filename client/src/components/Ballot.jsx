@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
   FormControl,
-  FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -9,13 +8,15 @@ import {
   Button,
   Dialog,
   Typography,
+  Divider,
 } from '@material-ui/core'
 import { vote } from '../lib/voting'
+import { Identicon } from './Identicon'
 
 const Ballot = ({
   accounts,
   contract,
-  ballot: { name, id: ballotId },
+  ballot: { name, id: ballotId, hash },
   ballotOpen,
   handleBallotClose,
   classes,
@@ -74,18 +75,28 @@ const Ballot = ({
 
   return (
     <Dialog
+      classes={{
+        paper: classes.paper,
+        container: classes.container,
+        root: classes.root,
+      }}
       open={ballotOpen}
       onClose={handleBallotClose}
       aria-labelledby="form-dialog-title"
     >
-      <Typography variant="h4">{name}</Typography>
+      <div style={{ minHeight: '100px', marginBottom: '1rem' }}>
+        <Identicon style={{ float: 'left', marginRight: '1rem' }} value={hash} />
+        <Typography component="div" style={{ display: 'inline' }} variant="h5">
+          {name}
+        </Typography>
+      </div>
+      <Divider />
 
       <FormControl
         onSubmit={handleVoteSubmit}
         component="form"
         className={classes.formControl}
       >
-        <FormLabel component="legend">Gender</FormLabel>
         <RadioGroup
           aria-label="Gender"
           name="gender1"
@@ -116,6 +127,20 @@ const Ballot = ({
   )
 }
 
-const styles = {}
+const styles = {
+  paper: {
+    display: 'block',
+    padding: '1rem',
+    margin: '1rem',
+    width: '100vw',
+  },
+  group: {
+    marginTop: '1rem',
+    marginBottom: '1rem',
+    marginLeft: '0.5rem',
+  },
+  container: {},
+  root: {},
+}
 
 export default withStyles(styles)(Ballot)

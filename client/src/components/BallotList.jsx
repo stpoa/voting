@@ -4,8 +4,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
-import Identicon from 'identicon.js'
 import { format } from 'date-fns'
+import { Identicon } from './Identicon';
 
 const BallotList = ({ classes, web3, contract, handleBallotClick }) => {
   const [ballots, setBallots] = useState({})
@@ -43,7 +43,7 @@ const BallotList = ({ classes, web3, contract, handleBallotClick }) => {
           {...{ key }}
         >
           <Avatar style={{ borderRadius: 0 }}>
-            <img src={'data:image/png;base64,' + new Identicon(hash)} />
+            <Identicon value={hash} width={40} height={40} />
           </Avatar>
           <ListItemText
             primary={name}
