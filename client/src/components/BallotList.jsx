@@ -60,8 +60,9 @@ const BallotList = ({ classes, web3, contract, handleBallotClick }) => {
 
 const styles = theme => ({
   root: {
-    width: 'calc(100% - 1rem)',
-    padding: '0.5rem',
+    width: 'calc(100% - 4rem)',
+    paddingLeft: '2rem',
+    paddingRight: '2rem',
     backgroundColor: theme.palette.background.paper,
   },
 })

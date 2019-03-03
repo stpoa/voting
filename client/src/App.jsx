@@ -20,7 +20,7 @@ const App = ({ classes }) => {
       <div className="App">
         <header className={classes.header}>
           <Typography
-            style={{ fontFamily: 'Dancing Script, cursive', fontSize: '24px' }}
+            style={{ fontFamily: 'Dancing Script, cursive', fontSize: '2.4rem' }}
             variant="h2"
             color="primary"
           >
@@ -35,7 +35,7 @@ const App = ({ classes }) => {
 
 const styles = {
   header: {
-    margin: '0.5rem',
+    margin: '1rem',
   },
 }
 
