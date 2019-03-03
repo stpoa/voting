@@ -7,8 +7,10 @@ import {
   DialogContentText,
   TextField,
   withStyles,
+  Fab,
 } from '@material-ui/core'
-import { defineBallotProposal, addBallot, begin } from '../lib/voting';
+import { defineBallotProposal, addBallot, begin } from '../lib/voting'
+import { Add } from '@material-ui/icons'
 
 const BallotCreate = ({ classes, web3, accounts, contract }) => {
   const [addBallotDialogOpen, setAddBallotDialogOpen] = useState(false)
@@ -104,13 +106,20 @@ const BallotCreate = ({ classes, web3, accounts, contract }) => {
           Create ballot
         </Button>
       </Dialog>
-      <Button variant="outlined" color="primary" onClick={handleAddBallotBtn}>
-        Add ballot
-      </Button>
+
+      <Fab color="primary" className={classes.fab} onClick={handleAddBallotBtn}>
+        <Add />
+      </Fab>
     </>
   )
 }
 
-const styles = {}
+const styles = {
+  fab: {
+    position: 'absolute',
+    bottom: '2rem',
+    right: '2rem',
+  }
+}
 
 export default withStyles(styles)(BallotCreate)
