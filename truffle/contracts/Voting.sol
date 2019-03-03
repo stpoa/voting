@@ -35,7 +35,7 @@ contract Voting {
 
     event Begun(uint256 indexed ballotId);
 
-    event Voted(address voter, uint256 indexed ballotId, uint8 proposalNumber);
+    event Voted(address indexed voter, uint256 indexed ballotId, uint8 proposalNumber);
 
     // Modifiers
     modifier onlyBegun(uint256 ballotId) {
