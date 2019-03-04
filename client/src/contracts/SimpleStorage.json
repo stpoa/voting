@@ -13,8 +13,7 @@
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0x60fe47b1"
+      "type": "function"
     },
     {
       "constant": true,
@@ -28,8 +27,7 @@
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function",
-      "signature": "0x6d4ce63c"
+      "type": "function"
     }
   ],
   "bytecode": "0x608060405234801561001057600080fd5b5060ec8061001f6000396000f3fe6080604052600436106049576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806360fe47b114604e5780636d4ce63c146085575b600080fd5b348015605957600080fd5b50608360048036036020811015606e57600080fd5b810190808035906020019092919050505060ad565b005b348015609057600080fd5b50609760b7565b6040518082815260200191505060405180910390f35b8060008190555050565b6000805490509056fea165627a7a7230582096b418d436a38e3cc184c1874c5b3b720ef30405455231d41539259a2eee0e7f0029",
@@ -546,88 +544,9 @@
     "name": "solc",
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
-  "networks": {
-    "4447": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551247795227": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551248399313": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551249884218": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551280967356": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551285614303": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551370272307": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551420475883": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551432454284": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551452596312": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551505917937": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551530236274": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    },
-    "1551597526560": {
-      "events": {},
-      "links": {},
-      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
-      "transactionHash": "0x138534080ac485f5b120f9d995e5a434823b07f5054e51c75d3c97427eb3abbd"
-    }
-  },
+  "networks": {},
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-03T07:18:55.513Z",
+  "updatedAt": "2019-03-03T18:09:13.720Z",
   "devdoc": {
     "methods": {}
   },

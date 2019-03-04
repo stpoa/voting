@@ -9370,87 +9370,103 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {
-    "4447": {
-      "events": {},
+    "1551636549977": {
+      "events": {
+        "0x89fce686a710602fe9144e996512ffd9c161d24bc26eed56f4dca2151ab5f073": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "creator",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "proposalCount",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "name": "name",
+              "type": "string"
+            }
+          ],
+          "name": "BallotAdded",
+          "type": "event",
+          "signature": "0x89fce686a710602fe9144e996512ffd9c161d24bc26eed56f4dca2151ab5f073"
+        },
+        "0x8af652bcac294cbcdd724c7bc33aca2800a5ad3ab4735d9692390ca52df8a7d8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "ballotId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "proposalId",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "name": "proposalName",
+              "type": "string"
+            }
+          ],
+          "name": "BallotProposalDefined",
+          "type": "event",
+          "signature": "0x8af652bcac294cbcdd724c7bc33aca2800a5ad3ab4735d9692390ca52df8a7d8"
+        },
+        "0xeded15e9695d96d83857ff916ce34bcda18b619961843afd49324ab95f8d68ec": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "ballotId",
+              "type": "uint256"
+            }
+          ],
+          "name": "Begun",
+          "type": "event",
+          "signature": "0xeded15e9695d96d83857ff916ce34bcda18b619961843afd49324ab95f8d68ec"
+        },
+        "0xcc66c27f993ef125e1b985d84a52726edc66dcc64e94d172f80253e37d526372": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "voter",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "ballotId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "proposalNumber",
+              "type": "uint8"
+            }
+          ],
+          "name": "Voted",
+          "type": "event",
+          "signature": "0xcc66c27f993ef125e1b985d84a52726edc66dcc64e94d172f80253e37d526372"
+        }
+      },
       "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xd1cc3bfea07bebc7a10ada8f58ced88b86d7defb5125005be7020df0e520f7e0"
-    },
-    "1551247795227": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xd1cc3bfea07bebc7a10ada8f58ced88b86d7defb5125005be7020df0e520f7e0"
-    },
-    "1551248399313": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xd1cc3bfea07bebc7a10ada8f58ced88b86d7defb5125005be7020df0e520f7e0"
-    },
-    "1551249884218": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xd1cc3bfea07bebc7a10ada8f58ced88b86d7defb5125005be7020df0e520f7e0"
-    },
-    "1551280967356": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xf1fd677880decb711534c2119c1e56cd69bcc2be682bdadc2ae154c6126071ed"
-    },
-    "1551285614303": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xf1fd677880decb711534c2119c1e56cd69bcc2be682bdadc2ae154c6126071ed"
-    },
-    "1551370272307": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xf1fd677880decb711534c2119c1e56cd69bcc2be682bdadc2ae154c6126071ed"
-    },
-    "1551420475883": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xe5e8538a4a7368170e1c6593bc1bf2a5e498e5b6dc7c3da3fc90d534a3e2fb0c"
-    },
-    "1551432454284": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xe5e8538a4a7368170e1c6593bc1bf2a5e498e5b6dc7c3da3fc90d534a3e2fb0c"
-    },
-    "1551452596312": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xe5e8538a4a7368170e1c6593bc1bf2a5e498e5b6dc7c3da3fc90d534a3e2fb0c"
-    },
-    "1551505917937": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xe5e8538a4a7368170e1c6593bc1bf2a5e498e5b6dc7c3da3fc90d534a3e2fb0c"
-    },
-    "1551530236274": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xe5e8538a4a7368170e1c6593bc1bf2a5e498e5b6dc7c3da3fc90d534a3e2fb0c"
-    },
-    "1551597526560": {
-      "events": {},
-      "links": {},
-      "address": "0x55a00841e2626685aF72B143D4B857081d018568",
-      "transactionHash": "0xe70c52975b9e99b5495485024a426bb89e1a8e4825d4e3b2dc3572b1a9256684"
+      "address": "0x565D064Be22A5eD77BA7e72CE0017579B5AA091e",
+      "transactionHash": "0x7758c5f3a74780758025cb3cf6bea477a5e97e69ae6c04850121dd148f4e36c6"
     }
   },
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-03T07:18:55.523Z",
+  "updatedAt": "2019-03-03T18:57:45.835Z",
   "devdoc": {
     "methods": {}
   },
