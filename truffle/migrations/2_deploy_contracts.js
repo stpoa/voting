@@ -1,7 +1,5 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
-var Voting = artifacts.require("./Voting.sol");
+module.exports = function (deployer /*: Truffle.Deployer*/) {
+  const Voting = artifacts.require('Voting')
 
-module.exports = function(deployer) {
-  deployer.deploy(SimpleStorage);
-  deployer.deploy(Voting);
-};
+  deployer.deploy(Voting)
+}

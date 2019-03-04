@@ -7,7 +7,8 @@
     "test": "test"
   },
   "dependencies": {
-    "ramda": "^0.26.1"
+    "ramda": "^0.26.1",
+    "truffle": "^5.0.6"
   },
   "devDependencies": {
     "@types/ramda": "^0.25.50",
@@ -24,7 +25,7 @@
     "testrpc": "ganache-cli -m 'nuclear february wave industry print security razor hen second detail decline rib' &",
     "compile": "truffle compile && typechain --target truffle './build/**/*.json' && npm run copy-artifacts",
     "copy-artifacts": "cp -fr build/contracts/* ../client/src/contracts/",
-    "migrate": "truffle migrate && npm run copy-artifacts",
+    "migrate": "truffle migrate --reset && npm run copy-artifacts",
     "test": "truffle test"
   },
   "keywords": [],
