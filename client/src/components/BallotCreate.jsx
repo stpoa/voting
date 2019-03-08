@@ -13,22 +13,27 @@ import { defineBallotProposal, addBallot, begin } from '../lib/voting'
 import { Add } from '@material-ui/icons'
 
 const BallotCreate = ({ classes, web3, accounts, contract }) => {
+  const creator = accounts[0]
   const [addBallotDialogOpen, setAddBallotDialogOpen] = useState(false)
   const [proposals, setProposals] = useState({ 0: '' })
+  const [voters, setVoters] = useState({ 0: creator, 1: '' })
 
   const handleAddBallotSubmit = async e => {
     e.preventDefault()
     const config = { contract, gas: 500000, from: accounts[0] }
-    const [name, ...rest] = [...e.target.elements].map(e => e.value)
-    const proposalNames = rest.filter(n => n.length)
+    const [name] = [...e.target.elements].map(e => e.value)
+
+    const proposalNames = Object.values(proposals).filter(n => n.length)
+    const voterAddresses = Object.values(voters).filter(n => n.length)
 
     setProposals({ 0: '' })
+    setVoters({ 0: '' })
     setAddBallotDialogOpen(false)
 
     const addBallotResult = await addBallot(config)({
       name,
       proposalCount: proposalNames.length + '',
-      voters: accounts,
+      voters: voterAddresses,
     })
 
     const ballotId = addBallotResult.events.BallotAdded.returnValues.id
@@ -57,7 +62,22 @@ const BallotCreate = ({ classes, web3, accounts, contract }) => {
 
       return { ...proposals, [key]: proposal, [nextKey]: nextVal }
     })
+    console.log({ voters, proposals })
   }
+
+  const handleVoterChange = key => e => {
+    const voter = e.target.value
+
+    setVoters(voters => {
+      const nextKey = Number(key) + 1
+      const nextVal = voters[nextKey] || ''
+
+      return { ...voters, [key]: voter, [nextKey]: nextVal }
+    })
+    console.log({ voters, proposals })
+  }
+
+
 
   return (
     <>
@@ -81,6 +101,22 @@ const BallotCreate = ({ classes, web3, accounts, contract }) => {
               label="Ballot name"
               fullWidth
             />
+            {Object.entries(voters).map(([key, voter]) => {
+              const num = Number(key) + 1
+
+              return (
+                <TextField
+                  key={key}
+                  onChange={handleVoterChange(key)}
+                  value={voter}
+                  margin="dense"
+                  id={'voter-' + num}
+                  name={'voter-' + num}
+                  label={'Voter ' + num}
+                  fullWidth
+                />
+              )
+            })}
             {Object.entries(proposals).map(([key, proposal]) => {
               const num = Number(key) + 1
 

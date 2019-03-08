@@ -9463,10 +9463,104 @@
       "links": {},
       "address": "0xC9a9B53FDA6564F3039A1C9A9866509782EfD15b",
       "transactionHash": "0x99ce76b5fe344fc6a1fb7f642631b4160f20f74848796ce62fead865448f9809"
+    },
+    "1552028838713": {
+      "events": {
+        "0x89fce686a710602fe9144e996512ffd9c161d24bc26eed56f4dca2151ab5f073": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "creator",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "proposalCount",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "name": "name",
+              "type": "string"
+            }
+          ],
+          "name": "BallotAdded",
+          "type": "event",
+          "signature": "0x89fce686a710602fe9144e996512ffd9c161d24bc26eed56f4dca2151ab5f073"
+        },
+        "0x8af652bcac294cbcdd724c7bc33aca2800a5ad3ab4735d9692390ca52df8a7d8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "ballotId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "proposalId",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "name": "proposalName",
+              "type": "string"
+            }
+          ],
+          "name": "BallotProposalDefined",
+          "type": "event",
+          "signature": "0x8af652bcac294cbcdd724c7bc33aca2800a5ad3ab4735d9692390ca52df8a7d8"
+        },
+        "0xeded15e9695d96d83857ff916ce34bcda18b619961843afd49324ab95f8d68ec": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "ballotId",
+              "type": "uint256"
+            }
+          ],
+          "name": "Begun",
+          "type": "event",
+          "signature": "0xeded15e9695d96d83857ff916ce34bcda18b619961843afd49324ab95f8d68ec"
+        },
+        "0xcc66c27f993ef125e1b985d84a52726edc66dcc64e94d172f80253e37d526372": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "voter",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "ballotId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "proposalNumber",
+              "type": "uint8"
+            }
+          ],
+          "name": "Voted",
+          "type": "event",
+          "signature": "0xcc66c27f993ef125e1b985d84a52726edc66dcc64e94d172f80253e37d526372"
+        }
+      },
+      "links": {},
+      "address": "0x483e23d323C765CE5DDC63Af55dADcB40cA12398",
+      "transactionHash": "0x5dd97ce80afce4d5396989c99d14bbedfce8c07d6c05d8afe5c5586f3cbffcec"
     }
   },
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-04T19:31:08.131Z",
+  "updatedAt": "2019-03-08T07:07:28.745Z",
   "devdoc": {
     "methods": {}
   },
