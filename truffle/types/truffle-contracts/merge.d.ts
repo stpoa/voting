@@ -9,7 +9,6 @@ declare global {
   namespace Truffle {
     interface Artifacts {
       require(name: "Migrations"): TruffleContracts.MigrationsContract;
-      require(name: "SimpleStorage"): TruffleContracts.SimpleStorageContract;
       require(name: "Voting"): TruffleContracts.VotingContract;
     }
   }
